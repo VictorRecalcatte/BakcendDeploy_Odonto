@@ -1,0 +1,34 @@
+POST  http://localhost:3535/adddentes
+Content-Type: application/json
+
+{   
+    "Avaliacao_arcada": "3",
+    "fk_Paciente_Cod_Paciente": "2",
+    "fk_Dente_Cod_dente": "3"
+}
+
+###
+
+POST  http://localhost:3535/addmedia
+Content-Type: application/json
+
+{   
+    "media": "1",
+    "cod_paciente": "2"
+}
+
+###
+
+POST  http://localhost:3535/addpaciente
+Content-Type: application/json
+
+{   
+    "nome": "Teste",
+    "cpf": "222.222.222-22",
+    "sexo": "Feminino",
+    "idade": "20"
+}
+
+###
+
+
