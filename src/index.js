@@ -66,6 +66,35 @@ app.get("/dentes", async (req, res) => {
   }
 });
 
+app.get("/paciente/:codPaciente", async (req, res) => {
+  try {
+    const { codPaciente } = req.params;
+
+    // Verifica se o codPaciente foi fornecido
+    if (!codPaciente) {
+      return res
+        .status(400)
+        .json({ message: "codPaciente do paciente é necessário." });
+    }
+
+    // Consulta o paciente pelo codPaciente
+    const q = "SELECT * FROM Paciente WHERE cod_paciente = $1";
+    const values = [codPaciente];
+
+    const result = await db.query(q, values);
+
+    // Verifica se o paciente foi encontrado
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "Paciente não encontrado." });
+    }
+
+    res.status(200).json(result.rows[0]); // Retorna o paciente encontrado
+  } catch (err) {
+    console.error("Erro ao buscar paciente:", err);
+    res.status(500).json({ message: "Erro ao buscar paciente.", err });
+  }
+});
+
 //Adiciona uma arcada dentária, com base nas notas dos dentes e no cod_paciente
 app.post("/adddentes", async (req, res) => {
   try {
