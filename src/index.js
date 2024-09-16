@@ -33,18 +33,18 @@ app.get("/pacientes", async (req, res) => {
 //Cadastrar novo paciente
 app.post("/addpaciente", async (req, res) => {
   try {
-    const { nome, cpf, sexo, idade } = req.body;
+    const { nome, cpf, matricula, sexo, idade } = req.body;
 
     // Verifica se todos os campos necessários estão presentes
-    if (!nome || !cpf || !sexo || !idade) {
+    if (!nome || !cpf || !matricula || !sexo || !idade) {
       return res
         .status(400)
         .json({ message: "Por favor, preencha todos os campos." });
     }
 
     const q =
-      "INSERT INTO Paciente (nome, cpf, sexo, idade) VALUES ($1, $2, $3, $4) RETURNING *";
-    const values = [nome, cpf, sexo, idade];
+      "INSERT INTO Paciente (nome, cpf, matricula, sexo, idade) VALUES ($1, $2, $3, $4, $5) RETURNING *";
+    const values = [nome, cpf, matricula, sexo, idade];
 
     // Insere o paciente no banco de dados e retorna o paciente inserido
     const result = await db.query(q, values);
