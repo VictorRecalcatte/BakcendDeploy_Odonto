@@ -11,12 +11,12 @@ app.use(cors()); //usar cors
 //Retorna o paciente com base no código do paciente digitado na home
 app.get("/pacientes", async (req, res) => {
   //Adicionando o nome da busca
-  const { nome } = req.query;
+  const { matricula } = req.query;
 
   //Consulta apurada com o Where, passando o Id
   try {
-    const result = await db.query("SELECT * FROM Paciente WHERE nome = $1", [
-      nome,
+    const result = await db.query("SELECT * FROM Paciente WHERE matricula = $1", [
+      matricula,
     ]);
 
     if (result.rowCount > 0) {
