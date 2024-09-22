@@ -9,13 +9,8 @@ Content-Type: application/json
 
 ###
 
-POST  http://localhost:3535/addmedia
+GET  https://localhost:3535/pacientes
 Content-Type: application/json
-
-{   
-    "media": "1",
-    "cod_paciente": "2"
-}
 
 ###
 

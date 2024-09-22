@@ -8,28 +8,6 @@ const port = 3535; // definir porta
 
 app.use(cors()); //usar cors
 
-//Retorna o paciente com base no código do paciente digitado na home
-app.get("/pacientes", async (req, res) => {
-  //Adicionando o nome da busca
-  const { matricula } = req.query;
-
-  //Consulta apurada com o Where, passando o Id
-  try {
-    const result = await db.query("SELECT * FROM Paciente WHERE matricula = $1", [
-      matricula,
-    ]);
-
-    if (result.rowCount > 0) {
-      res.status(200).json(result.rows[0]);
-    } else {
-      res.status(404).json({ message: "Paciente não encontrado" });
-    }
-  } catch (error) {
-    console.error("Erro ao buscar paciente:", error);
-    res.status(500).json({ message: "Erro ao buscar paciente" });
-  }
-});
-
 //Cadastrar novo paciente
 app.post("/addpaciente", async (req, res) => {
   try {
@@ -66,6 +44,7 @@ app.get("/dentes", async (req, res) => {
   }
 });
 
+//buscar paciente pela matricula
 app.get("/paciente/:codPaciente", async (req, res) => {
   try {
     const { codPaciente } = req.params;
@@ -78,7 +57,7 @@ app.get("/paciente/:codPaciente", async (req, res) => {
     }
 
     // Consulta o paciente pelo codPaciente
-    const q = "SELECT * FROM Paciente WHERE cod_paciente = $1";
+    const q = "SELECT * FROM Paciente WHERE matricula = $1";
     const values = [codPaciente];
 
     const result = await db.query(q, values);
@@ -157,6 +136,7 @@ app.post("/addmedia", async (req, res) => {
     res.status(500).json({ message: "Erro ao cadastrar média.", err });
   }
 });
+
 
 app.get("/media", async (req, res) => {
   try {
