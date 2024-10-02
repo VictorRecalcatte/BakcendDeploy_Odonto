@@ -99,7 +99,7 @@ app.post("/adddentes", async (req, res) => {
     // Inserindo cada dente individualmente por meio de um laço de repetição e seus index
     for (let i = 0; i < notas.length; i++) {
       const q =
-        "INSERT INTO Arcada_Dentaria (Avaliacao_arcada, fk_Paciente_Cod_Paciente, fk_Dente_Cod_dente) VALUES ($1, $2, $3)";
+        "INSERT INTO arcada_dentaria (Avaliacao_arcada, fk_Paciente_Cod_Paciente, fk_Dente_Cod_dente) VALUES ($1, $2, $3)";
       const values = [notas[i], fk_Paciente_Cod_Paciente, dentes[i]];
       await db.query(q, values);
     }
