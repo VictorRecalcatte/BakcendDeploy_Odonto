@@ -45,20 +45,20 @@ app.get("/dentes", async (req, res) => {
 });
 
 //buscar paciente pela matricula
-app.get("/paciente/:codPaciente", async (req, res) => {
+app.get("/paciente/:matricula", async (req, res) => {
   try {
-    const { codPaciente } = req.params;
+    const { matricula } = req.params;
 
-    // Verifica se o codPaciente foi fornecido
-    if (!codPaciente) {
+    // Verifica se a matricula  foi fornecido
+    if (!matricula) {
       return res
         .status(400)
-        .json({ message: "codPaciente do paciente é necessário." });
+        .json({ message: "matricula do paciente é necessário." });
     }
 
     // Consulta o paciente pelo codPaciente
     const q = "SELECT * FROM Paciente WHERE matricula = $1";
-    const values = [codPaciente];
+    const values = [matricula];
 
     const result = await db.query(q, values);
 
@@ -77,18 +77,18 @@ app.get("/paciente/:codPaciente", async (req, res) => {
 //Adiciona uma arcada dentária, com base nas notas dos dentes e no cod_paciente
 app.post("/adddentes", async (req, res) => {
   try {
-    const { Avaliacao_arcada, fk_Paciente_Cod_Paciente, fk_Dente_Cod_dente } =
+    const { avaliacao_arcada, fk_paciente_cod_paciente, fk_dente_cod_dente } =
       req.body; //Recebe os dados
-    if (!Avaliacao_arcada || !fk_Paciente_Cod_Paciente || !fk_Dente_Cod_dente) {
+    if (!avaliacao_arcada || !fk_paciente_cod_paciente || !fk_dente_cod_dente) {
       //Caso estejam vazios
       return res
         .status(400)
         .json({ message: "Por favor, forneça todos os dados necessários." });
     }
-
     // Separando as notas e ids dos dentes para inserção
-    const notas = Avaliacao_arcada.split(",");
-    const dentes = fk_Dente_Cod_dente.split(",");
+    const notas = avaliacao_arcada.split(",");
+    const dentes = fk_dente_cod_dente.split(",");
+
 
     if (notas.length !== dentes.length) {
       return res
@@ -96,11 +96,11 @@ app.post("/adddentes", async (req, res) => {
         .json({ message: "Notas e dentes não correspondem." });
     }
 
-    // Inserindo cada dente individualmente por meio de um laço de repetição e seus index
+    //Inserindo cada dente individualmente por meio de um laço de repetição e seus index
     for (let i = 0; i < notas.length; i++) {
       const q =
-        "INSERT INTO arcada_dentaria (Avaliacao_arcada, fk_Paciente_Cod_Paciente, fk_Dente_Cod_dente) VALUES ($1, $2, $3)";
-      const values = [notas[i], fk_Paciente_Cod_Paciente, dentes[i]];
+        "INSERT INTO arcada_dentaria (avaliacao_arcada, fk_paciente_cod_paciente, fk_dente_cod_dente) VALUES ($1, $2, $3)";
+      const values = [notas[i], fk_paciente_cod_paciente, dentes[i]];
       await db.query(q, values);
     }
 
@@ -124,7 +124,7 @@ app.post("/addmedia", async (req, res) => {
     }
 
     const q =
-      "INSERT INTO Media_paciente (media, fk_Paciente_Cod_Paciente ) VALUES ($1, $2)";
+      "INSERT INTO Media_paciente (media, fk_paciente_cod_paciente ) VALUES ($1, $2)";
     const values = [media, cod_paciente];
 
     // Insere a média no banco de dados
